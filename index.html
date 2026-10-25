@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>The ₹100/Day Hostel Protein Survival OS</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <meta name="theme-color" content="#a3e635">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            neon: '#a3e635', // Lime 400
+            surface: '#121214',
+            card: '#18181b',
+            border: '#27272a'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+    body { font-family: 'Inter', sans-serif; background-color: #09090b; color: #f4f4f5; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="min-h-screen pb-24 selection:bg-neon selection:text-black">
+
+  <!-- ACCESS KEY GATE MODAL -->
+  <div id="authModal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-card border border-border rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <div class="flex items-center gap-2 text-neon mb-2">
+        <i data-lucide="shield-check" class="w-6 h-6"></i>
+        <span class="text-xs font-bold tracking-widest uppercase mono">Verified Student Edition</span>
+      </div>
+      <h1 class="text-2xl font-extrabold text-white mb-2">The ₹100/Day Hostel Protein OS</h1>
+      <p class="text-sm text-zinc-400 mb-6">Hit 100g+ protein daily using hostel kettle hacks, mess tricks & zero expensive supplements.</p>
+
+      <div class="space-y-3">
+        <div>
+          <label class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1.5">Enter Your VIP Access Code</label>
+          <input id="accessInput" type="text" placeholder="e.g. HOSTEL100" 
+            class="w-full bg-surface border border-border focus:border-neon rounded-xl px-4 py-3 text-white font-bold mono uppercase outline-none transition">
+          <p id="authError" class="text-xs text-red-400 mt-1.5 hidden">Invalid code. Try HOSTEL100 or preview free below.</p>
+        </div>
+        <button onclick="unlockApp()" class="w-full bg-neon hover:bg-lime-300 text-black font-extrabold py-3.5 rounded-xl transition flex items-center justify-center gap-2">
+          <span>Unlock Full Survival Guide</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+        <button onclick="unlockDemo()" class="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-semibold py-2.5 rounded-xl text-xs transition">
+          Preview Free Sample Mode (Try Calculator)
+        </button>
+      </div>
+
+      <div class="mt-6 pt-5 border-t border-border flex items-center justify-between text-xs text-zinc-400">
+        <span>Don't have a code?</span>
+        <a href="#buy" onclick="unlockDemo()" class="text-neon font-semibold hover:underline">Get Instant Access for ₹199 →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP HEADER -->
+  <header class="sticky top-0 z-30 bg-zinc-950/85 backdrop-blur-md border-b border-border px-4 py-3.5">
+    <div class="max-w-3xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-neon/10 border border-neon/30 flex items-center justify-center text-neon font-black mono">
+          ₹100
+        </div>
+        <div>
+          <h1 class="text-sm font-extrabold tracking-tight text-white leading-none">HOSTEL PROTEIN OS</h1>
+          <span id="licenseBadge" class="text-[11px] text-neon mono font-medium">FULL EDITION UNLOCKED</span>
+        </div>
+      </div>
+      <button onclick="resetLock()" class="text-xs text-zinc-400 hover:text-white bg-card border border-border px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+        <i data-lucide="key-round" class="w-3.5 h-3.5"></i>
+        <span>Key</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-3xl mx-auto px-4 pt-5 space-y-6">
+
+    <!-- LIVE STICKY HUD: PROTEIN vs BUDGET -->
+    <section class="bg-card border border-border rounded-2xl p-4 shadow-lg">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-xs font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
+          <i data-lucide="flame" class="w-4 h-4 text-neon"></i> Daily Hostel Stack Tracker
+        </span>
+        <button onclick="clearStack()" class="text-xs text-zinc-400 hover:text-red-400 transition">Reset Stack</button>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3">
+        <!-- Protein Meter -->
+        <div class="bg-surface border border-border rounded-xl p-3">
+          <div class="text-xs text-zinc-400">Total Protein</div>
+          <div class="text-2xl font-black text-neon mono mt-0.5"><span id="totalProtein">36</span>g</div>
+          <div class="w-full bg-zinc-800 h-1.5 rounded-full mt-2 overflow-hidden">
+            <div id="proteinBar" class="bg-neon h-full transition-all duration-300" style="width: 36%"></div>
+          </div>
+          <div class="text-[10px] text-zinc-500 mt-1">Target: 100g / day</div>
+        </div>
+
+        <!-- Budget Meter -->
+        <div class="bg-surface border border-border rounded-xl p-3">
+          <div class="text-xs text-zinc-400">Hostel Spend</div>
+          <div class="text-2xl font-black text-white mono mt-0.5">₹<span id="totalCost">0</span></div>
+          <div class="w-full bg-zinc-800 h-1.5 rounded-full mt-2 overflow-hidden">
+            <div id="costBar" class="bg-emerald-400 h-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+          <div id="budgetStatus" class="text-[10px] text-zinc-500 mt-1">Cap: ₹100 / day</div>
+        </div>
+
+        <!-- Calories Meter -->
+        <div class="bg-surface border border-border rounded-xl p-3">
+          <div class="text-xs text-zinc-400">Stack Calories</div>
+          <div class="text-2xl font-black text-zinc-200 mono mt-0.5"><span id="totalCals">650</span></div>
+          <div class="text-[10px] text-zinc-400 mt-2.5 flex items-center gap-1">
+            <input type="checkbox" id="messToggle" checked onchange="renderStack()" class="accent-lime-400 rounded cursor-pointer">
+            <label for="messToggle" class="cursor-pointer">+36g Mess Base</label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NAVIGATION TABS -->
+    <nav class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+      <button onclick="switchTab('builder')" id="tab-builder" class="tab-btn active-tab shrink-0 px-4 py-2.5 rounded-xl text-xs font-bold border transition flex items-center gap-1.5 bg-neon text-black border-neon">
+        <i data-lucide="calculator" class="w-4 h-4"></i> 1. ₹100 Stack Builder
+      </button>
+      <button onclick="switchTab('kettle')" id="tab-kettle" class="tab-btn shrink-0 px-4 py-2.5 rounded-xl text-xs font-bold border border-border bg-card text-zinc-300 hover:text-white transition flex items-center gap-1.5">
+        <i data-lucide="zap" class="w-4 h-4"></i> 2. Kettle Recipes
+      </button>
+      <button onclick="switchTab('mess')" id="tab-mess" class="tab-btn shrink-0 px-4 py-2.5 rounded-xl text-xs font-bold border border-border bg-card text-zinc-300 hover:text-white transition flex items-center gap-1.5">
+        <i data-lucide="utensils" class="w-4 h-4"></i> 3. Mess Survival Hacks
+      </button>
+      <button onclick="switchTab('gut')" id="tab-gut" class="tab-btn shrink-0 px-4 py-2.5 rounded-xl text-xs font-bold border border-border bg-card text-zinc-300 hover:text-white transition flex items-center gap-1.5">
+        <i data-lucide="shield-alert" class="w-4 h-4"></i> 4. No-Bloat Rules
+      </button>
+    </nav>
+
+    <!-- TAB 1: INTERACTIVE ₹100 STACK BUILDER -->
+    <section id="view-builder" class="space-y-4">
+      <div class="bg-zinc-900/60 border border-border rounded-xl p-3.5 flex items-center justify-between">
+        <div>
+          <h2 class="text-sm font-bold text-white">Tap Foods to Build Your ₹100/Day Stack</h2>
+          <p class="text-xs text-zinc-400">Your Mess Base (2 katori dal + 4 roti + rice + curd) already gives ~36g protein for ₹0 extra.</p>
+        </div>
+        <button onclick="loadPreset('veg')" class="shrink-0 bg-zinc-800 hover:bg-zinc-700 text-neon text-xs font-bold px-3 py-2 rounded-lg border border-neon/30 transition">
+          Load ₹95 Combo
+        </button>
+      </div>
+
+      <div id="foodGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- TAB 2: KETTLE & NO-COOK RECIPES -->
+    <section id="view-kettle" class="space-y-4 hidden">
+      <div class="bg-card border border-border rounded-2xl p-5 space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="bg-neon/10 text-neon border border-neon/30 text-xs font-bold px-2.5 py-1 rounded-md mono">10 MINS • ELECTRIC KETTLE</span>
+          <span class="text-xs font-bold text-zinc-400 mono">26g Protein • ₹15</span>
+        </div>
+        <h3 class="text-lg font-extrabold text-white">1. Crispy Masala Soya Chunks (Zero Stove)</h3>
+        <p class="text-xs text-zinc-400 leading-relaxed">Most hostel guys hate soya chunks because they eat them spongy and bland. Here is how to make them taste like street-style chaap inside a standard 1.5L kettle:</p>
+        <ol class="text-xs text-zinc-300 space-y-2 list-decimal pl-4">
+          <li>Boil 50g Soya Chunks in your kettle for 4 minutes with a pinch of salt.</li>
+          <li>Drain completely and <strong>squeeze out 100% of the water</strong> under cold tap water (this removes the raw bean smell).</li>
+          <li>With the kettle switched OFF (using residual heat) or pulsed for 30 seconds, toss chunks with 100g ₹10 Dahi, Peri-Peri or Maggi Masala, and chopped onion.</li>
+        </ol>
+      </div>
+
+      <div class="bg-card border border-border rounded-2xl p-5 space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="bg-neon/10 text-neon border border-neon/30 text-xs font-bold px-2.5 py-1 rounded-md mono">2 MINS • SHAKER BOTTLE</span>
+          <span class="text-xs font-bold text-zinc-400 mono">24g Protein • ₹25</span>
+        </div>
+        <h3 class="text-lg font-extrabold text-white">2. The Hostel "Desi Whey" Sattu & Peanut Shake</h3>
+        <p class="text-xs text-zinc-400 leading-relaxed">Can't afford ₹3,000 whey? Drink this post-workout or between morning lectures:</p>
+        <ul class="text-xs text-zinc-300 space-y-2 list-disc pl-4">
+          <li><strong>60g Roasted Chana Sattu Powder</strong> (₹12) — 14g protein, instant mixing.</li>
+          <li><strong>250ml Chilled Buttermilk (Chaas) or Milk</strong> (₹10) — adds 8g–10g complete dairy protein to balance amino acids.</li>
+          <li><strong>Savory Version:</strong> Black salt, roasted jeera, chopped green chili.</li>
+          <li><strong>Sweet Bulk Version:</strong> Milk + 1 Banana + 1 tbsp Peanut Butter.</li>
+        </ul>
+      </div>
+
+      <div class="bg-card border border-border rounded-2xl p-5 space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="bg-neon/10 text-neon border border-neon/30 text-xs font-bold px-2.5 py-1 rounded-md mono">8 MINS • KETTLE</span>
+          <span class="text-xs font-bold text-zinc-400 mono">24g Protein • ₹32</span>
+        </div>
+        <h3 class="text-lg font-extrabold text-white">3. No-Crack Kettle Boiled Eggs + Egg Chaat</h3>
+        <p class="text-xs text-zinc-400 leading-relaxed">Stop cracking eggs inside your kettle (it ruins the heating coil):</p>
+        <ul class="text-xs text-zinc-300 space-y-2 list-disc pl-4">
+          <li>Place 4 washed eggs gently at the bottom, cover with water 1 inch above eggs, and add 1 tsp salt (prevents whites leaking if a shell hairline-cracks).</li>
+          <li>Let the kettle auto-cut off, then <strong>leave the lid closed for 7 minutes</strong> in the hot water. Perfect hard-boiled eggs with zero electricity wasted.</li>
+          <li>Slice in half, top with ₹5 chaat masala, black pepper, and chopped onion.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TAB 3: MESS SURVIVAL MATRIX -->
+    <section id="view-mess" class="space-y-4 hidden">
+      <div class="bg-card border border-border rounded-2xl overflow-hidden">
+        <div class="p-4 border-b border-border bg-zinc-900/50">
+          <h3 class="text-sm font-extrabold text-white">The Indian Hostel Mess Survival Matrix</h3>
+          <p class="text-xs text-zinc-400">Your parents already paid for the mess. Squeeze 35g–45g of free protein out of it daily without getting a fat belly from seed oils.</p>
+        </div>
+        <div class="divide-y divide-border text-xs">
+          <div class="p-4 space-y-1.5">
+            <div class="font-bold text-neon uppercase mono">Morning Breakfast (8:00 AM)</div>
+            <p class="text-zinc-300"><strong>The Trap:</strong> Poha, Upma, Parathas drowned in palm oil, or 6 slices of white bread jam (95% carbs, 4g protein).</p>
+            <p class="text-white"><strong>The Hack:</strong> Take a smaller portion of Poha for carbs, carry your own <strong>3 Kettle-Boiled Eggs or 50g Roasted Chana</strong> to the mess table, and always grab the glass of mess milk/curd.</p>
+          </div>
+          <div class="p-4 space-y-1.5">
+            <div class="font-bold text-neon uppercase mono">Afternoon Lunch (1:00 PM)</div>
+            <p class="text-zinc-300"><strong>The Trap:</strong> Watery dal where 90% of the ladle is yellow water and 10% is actual lentils.</p>
+            <p class="text-white"><strong>The Hack:</strong> Ask the server to <strong>scoop from the bottom of the dal bucket</strong> (thickest lentil concentration). Pair 2 thick bowls of Dal/Rajma/Chole with 3 rotis + 1 bowl rice (combining grains + legumes completes the amino acid profile).</p>
+          </div>
+          <div class="p-4 space-y-1.5">
+            <div class="font-bold text-neon uppercase mono">Night Dinner (8:30 PM)</div>
+            <p class="text-zinc-300"><strong>The Trap:</strong> Skipping dinner and ordering ₹150 late-night Maggi or Momos during exam week.</p>
+            <p class="text-white"><strong>The Hack:</strong> Keep a 1kg jar of <strong>Roasted Peanuts & Soya Chunks</strong> in your locker. Add 40g boiled soya chunks straight into whatever sabzi/gravy the mess serves at night.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: GUT & BIOAVAILABILITY PROTOCOL -->
+    <section id="view-gut" class="space-y-4 hidden">
+      <div class="bg-card border border-border rounded-2xl p-5 space-y-4">
+        <h3 class="text-base font-extrabold text-white">4 Rules So Budget Protein Doesn't Wreck Your Stomach</h3>
+        <div class="space-y-3 text-xs text-zinc-300">
+          <div class="p-3 bg-surface rounded-xl border border-border">
+            <strong class="text-neon block mb-1">1. The 60g Soya Cap (Myth vs. Science)</strong>
+            Soya chunks will <em>not</em> give you man-boobs (gyno) at normal doses—human clinical trials show phytoestrogens don't lower testosterone when eaten under 50g–60g dry weight per day. Cap dry soya chunks at <strong>50g/day</strong> for optimal digestion.
+          </div>
+          <div class="p-3 bg-surface rounded-xl border border-border">
+            <strong class="text-neon block mb-1">2. Always Pair Plant Protein With ₹10 Curd/Chaas</strong>
+            Hostel legumes (chana, soya, dal) contain phytates that cause gas. Adding probiotic curd or buttermilk with roasted jeera cuts bloating by 80% and boosts leucine absorption.
+          </div>
+          <div class="p-3 bg-surface rounded-xl border border-border">
+            <strong class="text-neon block mb-1">3. Amino Acid Stacking (PDCAAS Fix)</strong>
+            Vegetarian sources alone have lower bioavailability than whey. Always combine <strong>Grains (Roti/Rice) + Pulses (Dal/Chana/Sattu) + Dairy/Eggs</strong> in the same day to hit complete muscle protein synthesis.
+          </div>
+          <div class="p-3 bg-surface rounded-xl border border-border">
+            <strong class="text-neon block mb-1">4. Hostel Hydration Rule (3.5 Liters)</strong>
+            Jumping from 40g to 110g protein overnight without water causes acne and constipation. Fill three 1-liter bottles from the hostel RO cooler every morning and finish them before 9 PM.
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- STICKY BOTTOM CTA / UPSELL BAR FOR YOUR FRIEND'S COACHING -->
+  <footer class="fixed bottom-0 inset-x-0 z-30 bg-zinc-950/95 backdrop-blur-md border-t border-border px-4 py-3">
+    <div class="max-w-3xl mx-auto flex items-center justify-between gap-3">
+      <div>
+        <div class="text-xs font-extrabold text-white">Want a Custom Hostel Workout + Form Check?</div>
+        <div class="text-[11px] text-zinc-400">Join the 3-Friend Hostel Squad Coaching or get a ₹299 Form Audit</div>
+      </div>
+      <a href="https://wa.me/919999999999?text=Hey%20Coach!%20I%20am%20using%20the%20Rs100%20Hostel%20Protein%20Guide%20and%20want%20to%20ask%20about%20the%20Hostel%20Workout%20Plan" target="_blank"
+        class="shrink-0 bg-neon hover:bg-lime-300 text-black font-extrabold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-1.5">
+        <span>WhatsApp Coach</span>
+        <i data-lucide="message-circle" class="w-4 h-4"></i>
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    // VALID ACCESS CODES
+    const VALID_CODES = ['HOSTEL100', 'GYMBRO26', 'AESTHETIC', 'VIP100'];
+
+    // HOSTEL PROTEIN DATABASE (Realistic 2026 Indian Local Store Prices)
+    const FOODS = [
+      { id: 'soya', name: '50g Soya Chunks (Dry wt)', cost: 10, protein: 26, cals: 172, tag: 'Cheapest King', desc: 'Boil in kettle + squeeze water' },
+      { id: 'eggs4', name: '4 Whole Boiled Eggs', cost: 32, protein: 24, cals: 280, tag: 'Gold Standard', desc: '₹8/egg at local tapri or crate' },
+      { id: 'eggwhites', name: '2 Whole + 3 Egg Whites', cost: 40, protein: 23, cals: 190, tag: 'Lean Cut', desc: 'High bioavailability for cutting' },
+      { id: 'sattu', name: '60g Chana Sattu Powder', cost: 12, protein: 14, cals: 215, tag: 'No-Cook', desc: 'Shake in bottle with water & salt' },
+      { id: 'chana', name: '60g Roasted Bhuna Chana', cost: 12, protein: 13, cals: 210, tag: 'Pocket Snack', desc: 'Crunch between college lectures' },
+      { id: 'curd', name: '200g Amul Masti Dahi / Chaas', cost: 18, protein: 8, cals: 120, tag: 'Gut Health', desc: 'Kills soya bloat + adds dairy protein' },
+      { id: 'peanuts', name: '40g Raw/Roasted Peanuts', cost: 10, protein: 10, cals: 225, tag: 'Hardgainer', desc: 'Easy calories + healthy fats' },
+      { id: 'milk', name: '250ml Toned Milk Packet', cost: 16, protein: 8, cals: 150, tag: 'Night Recovery', desc: 'Casein protein before sleep' },
+      { id: 'moong', name: '50g Green Moong Sprouts', cost: 10, protein: 12, cals: 150, tag: 'Micro-Nutrients', desc: 'Soak overnight in hostel mug' },
+      { id: 'paneer', name: '100g Local Dairy Paneer', cost: 38, protein: 18, cals: 265, tag: 'Veg Treat', desc: 'Great on days you skip eggs' }
+    ];
+
+    let counts = JSON.parse(localStorage.getItem('hostel_stack')) || { soya: 1, eggs4: 1, sattu: 1, curd: 1 };
+
+    function initApp() {
+      lucide.createIcons();
+      const unlocked = localStorage.getItem('hostel_unlocked');
+      if (!unlocked) {
+        document.getElementById('authModal').classList.remove('hidden');
+      }
+      renderStack();
+    }
+
+    function unlockApp() {
+      const code = document.getElementById('accessInput').value.trim().toUpperCase();
+      if (VALID_CODES.includes(code)) {
+        localStorage.setItem('hostel_unlocked', 'FULL');
+        document.getElementById('authModal').classList.add('hidden');
+        document.getElementById('licenseBadge').innerText = 'VIP FULL ACCESS • ' + code;
+      } else {
+        document.getElementById('authError').classList.remove('hidden');
+      }
+    }
+
+    function unlockDemo() {
+      localStorage.setItem('hostel_unlocked', 'DEMO');
+      document.getElementById('authModal').classList.add('hidden');
+      document.getElementById('licenseBadge').innerText = 'FREE PREVIEW MODE (CODE: HOSTEL100)';
+    }
+
+    function resetLock() {
+      localStorage.removeItem('hostel_unlocked');
+      document.getElementById('authModal').classList.remove('hidden');
+    }
+
+    function updateQty(id, delta) {
+      counts[id] = Math.max(0, (counts[id] || 0) + delta);
+      localStorage.setItem('hostel_stack', JSON.stringify(counts));
+      renderStack();
+    }
+
+    function clearStack() {
+      counts = {};
+      localStorage.setItem('hostel_stack', JSON.stringify(counts));
+      renderStack();
+    }
+
+    function loadPreset(type) {
+      counts = { soya: 1, eggs4: 1, sattu: 1, curd: 1, peanuts: 1 };
+      localStorage.setItem('hostel_stack', JSON.stringify(counts));
+      renderStack();
+    }
+
+    function renderStack() {
+      const grid = document.getElementById('foodGrid');
+      const includeMess = document.getElementById('messToggle').checked;
+
+      let totalProtein = includeMess ? 36 : 0;
+      let totalCost = 0;
+      let totalCals = includeMess ? 650 : 0;
+
+      grid.innerHTML = FOODS.map(item => {
+        const qty = counts[item.id] || 0;
+        totalProtein += item.protein * qty;
+        totalCost += item.cost * qty;
+        totalCals += item.cals * qty;
+
+        return `
+          <div class="bg-card border ${qty > 0 ? 'border-neon/60 bg-neon/[0.03]' : 'border-border'} rounded-xl p-3.5 flex items-center justify-between transition">
+            <div class="pr-2">
+              <div class="flex items-center gap-2">
+                <span class="text-sm font-bold text-white">${item.name}</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-zinc-800 text-neon mono">${item.tag}</span>
+              </div>
+              <div class="text-xs text-zinc-400 mt-0.5">${item.desc}</div>
+              <div class="flex items-center gap-3 mt-2 text-xs mono font-semibold">
+                <span class="text-neon">+${item.protein}g Protein</span>
+                <span class="text-zinc-300">₹${item.cost}</span>
+                <span class="text-zinc-500">${item.cals} kcal</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 bg-surface border border-border rounded-xl p-1 shrink-0">
+              <button onclick="updateQty('${item.id}', -1)" class="w-7 h-7 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-bold flex items-center justify-center">-</button>
+              <span class="w-5 text-center text-sm font-extrabold mono ${qty > 0 ? 'text-neon' : 'text-zinc-500'}">${qty}</span>
+              <button onclick="updateQty('${item.id}', 1)" class="w-7 h-7 rounded-lg bg-neon text-black font-extrabold flex items-center justify-center">+</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('totalProtein').innerText = totalProtein;
+      document.getElementById('totalCost').innerText = totalCost;
+      document.getElementById('totalCals').innerText = totalCals;
+
+      // Update Progress Bars
+      const pPct = Math.min(100, totalProtein);
+      document.getElementById('proteinBar').style.width = pPct + '%';
+
+      const cPct = Math.min(100, totalCost);
+      const costBar = document.getElementById('costBar');
+      const budgetStatus = document.getElementById('budgetStatus');
+      costBar.style.width = cPct + '%';
+
+      if (totalCost > 100) {
+        costBar.className = 'bg-red-500 h-full transition-all duration-300';
+        budgetStatus.innerText = `Over budget by ₹${totalCost - 100}!`;
+        budgetStatus.className = 'text-[10px] text-red-400 font-bold mt-1';
+      } else {
+        costBar.className = 'bg-emerald-400 h-full transition-all duration-300';
+        budgetStatus.innerText = `₹${100 - totalCost} left in daily budget`;
+        budgetStatus.className = 'text-[10px] text-emerald-400 mt-1';
+      }
+    }
+
+    function switchTab(tab) {
+      ['builder', 'kettle', 'mess', 'gut'].forEach(t => {
+        document.getElementById('view-' + t).classList.add('hidden');
+        const btn = document.getElementById('tab-' + t);
+        btn.className = 'tab-btn shrink-0 px-4 py-2.5 rounded-xl text-xs font-bold border border-border bg-card text-zinc-300 hover:text-white transition flex items-center gap-1.5';
+      });
+      document.getElementById('view-' + tab).classList.remove('hidden');
+      const activeBtn = document.getElementById('tab-' + tab);
+      activeBtn.className = 'tab-btn shrink-0 px-4 py-2.5 rounded-xl text-xs font-bold border transition flex items-center gap-1.5 bg-neon text-black border-neon';
+    }
+
+    window.onload = initApp;
+  </script>
+</body>
+</html>
